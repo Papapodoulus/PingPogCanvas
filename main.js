@@ -1,5 +1,7 @@
 'use strict';
 
+// Falta arreglar bug de que cambie la bola al que marca y que cuando se inicie la bola empiece en la mitad
+
 
 var canvas;
 var canvasContext;
@@ -14,6 +16,8 @@ var paddle2Y = 250;
 var player1Score = 0;
 var player2Score = 0;
 
+var fps = 60;
+
 var showWinScreen = false;
 
 const PADDLE_HEIGHT = 100;
@@ -22,8 +26,10 @@ const WINNING_SCORE = 3;
 
 window.onload = () => {
     canvas = document.getElementById('gameCanvas');
+    canvas.width = window.innerWidth - 10;
+    canvas.height = window.innerHeight - 10;
     canvasContext = canvas.getContext('2d');
-    var fps = 60;
+
     setInterval(() => {
         createElements();
         moveBall();
@@ -71,7 +77,8 @@ function moveBall() {
 
     if (ballX > canvas.width) {
         if (ballY > paddle2Y && ballY < paddle2Y + PADDLE_HEIGHT) {
-            ballXSpeed = -ballXSpeed;
+            ballXSpeed = -(ballXSpeed + (ballXSpeed * 0.1));
+            console.log(ballXSpeed);
             ballYSpeed = (ballY - (paddle1Y + PADDLE_HEIGHT / 2)) * 0.35;
         } else {
             player1Score += 1;
@@ -79,7 +86,8 @@ function moveBall() {
         }
     } else if (ballX < 0) {
         if (ballY > paddle1Y && ballY < paddle1Y + PADDLE_HEIGHT) {
-            ballXSpeed = -ballXSpeed;
+            ballXSpeed = -(ballXSpeed + (ballXSpeed * 0.1));
+            console.log(ballXSpeed);
             ballYSpeed = (ballY - (paddle1Y + PADDLE_HEIGHT / 2)) * 0.35;
 
         } else {
@@ -124,6 +132,7 @@ function ballReset() {
     if (player1Score === WINNING_SCORE || player2Score === WINNING_SCORE) {
         showWinScreen = true;
     }
+    ballXSpeed = 5;
     ballXSpeed = -ballXSpeed;
     ballX = canvas.width / 2;
     ballY = canvas.height / 2;
