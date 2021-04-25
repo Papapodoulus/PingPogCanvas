@@ -1,12 +1,9 @@
 'use strict';
 
-// Falta arreglar bug de que cambie la bola al que marca y que cuando se inicie la bola empiece en la mitad
-
-
 var canvas;
 var canvasContext;
-var ballX = 50;
-var ballY = 50;
+var ballX = window.innerWidth / 2;
+var ballY = window.innerHeight / 2;
 var ballXSpeed = 5;
 var ballYSpeed = 5;
 
@@ -82,7 +79,8 @@ function moveBall() {
             ballYSpeed = (ballY - (paddle1Y + PADDLE_HEIGHT / 2)) * 0.35;
         } else {
             player1Score += 1;
-            ballReset();
+            var leftPoint = true;
+            ballReset(leftPoint);
         }
     } else if (ballX < 0) {
         if (ballY > paddle1Y && ballY < paddle1Y + PADDLE_HEIGHT) {
@@ -92,8 +90,8 @@ function moveBall() {
 
         } else {
             player2Score += 1;
-
-            ballReset();
+            var leftPoint = false;
+            ballReset(leftPoint);
         }
 
     } else if (ballY > canvas.height) {
@@ -128,12 +126,15 @@ function calculateMousePos(evt) {
     };
 }
 
-function ballReset() {
+function ballReset(leftPoint) {
     if (player1Score === WINNING_SCORE || player2Score === WINNING_SCORE) {
         showWinScreen = true;
     }
-    ballXSpeed = 5;
-    ballXSpeed = -ballXSpeed;
+    if (leftPoint) {
+        ballXSpeed = 5;
+    } else {
+        ballXSpeed = -5;
+    }
     ballX = canvas.width / 2;
     ballY = canvas.height / 2;
 }
